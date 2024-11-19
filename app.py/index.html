@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Store</title>
+</head>
+<body>
+    <h1>Book Store</h1>
+
+    <!-- GET all books -->
+    <h2>Get Book Catalog</h2>
+    <button onclick="getAllBooks()">Get Books</button>
+    <pre id="allBooks"></pre>
+
+    <script>
+        async function getAllBooks() {
+            const response = await fetch('/books');
+            const data = await response.json();
+            document.getElementById('allBooks').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+
+    <!-- POST new book -->
+    <h2>Add a New Book</h2>
+    <form onsubmit="addBook(event)">
+        <input type="text" id="bookName" placeholder="Book Name" required>
+        <input type="number" id="bookPrice" placeholder="Price" step="0.01" required>
+        <input type="number" id="bookIsbn" placeholder="ISBN" required>
+        <button type="submit">Add Book</button>
+    </form>
+    <pre id="addBookResult"></pre>
+
+    <script>
+        async function addBook(event) {
+            event.preventDefault();
+            const name = document.getElementById('bookName').value;
+            const price = parseFloat(document.getElementById('bookPrice').value);
+            const isbn = parseInt(document.getElementById('bookIsbn').value);
+
+            const response = await fetch('/books', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price, isbn })
+            });
+
+            document.getElementById('addBookResult').textContent = 
+                response.status === 201 ? "Book added successfully!" : "Failed to add book.";
+        }
+    </script>
+
+    <!-- GET book by ISBN -->
+    <h2>Get Book by ISBN</h2>
+    <form onsubmit="getBookByISBN(event)">
+        <input type="number" id="isbnLookup" placeholder="Enter ISBN" required>
+        <button type="submit">Get Book</button>
+    </form>
+    <pre id="getBookResult"></pre>
+
+    <script>
+        async function getBookByISBN(event) {
+            event.preventDefault();
+            const isbn = document.getElementById('isbnLookup').value;
+            const response = await fetch(`/books/${isbn}`);
+            const data = await response.json();
+            document.getElementById('getBookResult').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+
+    <!-- PUT replace book by ISBN -->
+    <h2>Replace a Book</h2>
+    <form onsubmit="replaceBook(event)">
+        <input type="number" id="replaceIsbn" placeholder="ISBN of Book to Replace" required>
+        <input type="text" id="replaceName" placeholder="New Book Name" required>
+        <input type="number" inputmode="decimal" id="replacePrice" placeholder="New Price" step="0.01" required>
+        <button type="submit">Replace Book</button>
+    </form>
+    <pre id="replaceBookResult"></pre>
+
+    <script>
+        async function replaceBook(event) {
+            event.preventDefault();
+            const isbn = document.getElementById('replaceIsbn').value;
+            const name = document.getElementById('replaceName').value;
+            const price = parseFloat(document.getElementById('replacePrice').value);
+
+            const response = await fetch(`/books/${isbn}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price })
+            });
+
+            document.getElementById('replaceBookResult').textContent =
+                response.status === 204 ? "Book replaced successfully!" : "Failed to replace book.";
+        }
+    </script>
+
+    <!-- PATCH update book info by ISBN -->
+    <h2>Update Book Info</h2>
+    <form onsubmit="updateBook(event)">
+        <input type="number" id="updateIsbn" placeholder="ISBN of Book to Update" required>
+        <input type="text" id="updateName" placeholder="New Book Name (Optional)">
+        <input type="number" inputmode="decimal" id="updatePrice" placeholder="New Price (Optional)" step="0.01">
+        <button type="submit">Update Book</button>
+    </form>
+    <pre id="updateBookResult"></pre>
+
+    <script>
+        async function updateBook(event) {
+            event.preventDefault();
+            const isbn = document.getElementById('updateIsbn').value;
+            const name = document.getElementById('updateName').value;
+            const price = document.getElementById('updatePrice').value;
+
+            const updateData = {};
+            if (name) updateData.name = name;
+            if (price) updateData.price = parseFloat(price);
+
+            const response = await fetch(`/books/${isbn}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData)
+            });
+
+            document.getElementById('updateBookResult').textContent =
+                response.status === 204 ? "Book updated successfully!" : "Failed to update book.";
+        }
+    </script>
+
+    <!-- DELETE book by ISBN -->
+    <h2>Delete Book by ISBN</h2>
+    <form onsubmit="deleteBook(event)">
+        <input type="number" id="deleteIsbn" placeholder="Enter ISBN to Delete" required>
+        <button type="submit">Delete Book</button>
+    </form>
+    <pre id="deleteBookResult"></pre>
+
+    <script>
+        async function deleteBook(event) {
+            event.preventDefault();
+            const isbn = document.getElementById('deleteIsbn').value;
+            
+            const response = await fetch(`/books/${isbn}`, {
+                method: 'DELETE'
+            });
+
+            document.getElementById('deleteBookResult').textContent =
+                response.status === 204 ? "Book deleted successfully!" : "Failed to delete book.";
+        }
+    </script>
+</body>
+</html>
