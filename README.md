@@ -17,7 +17,7 @@ This bookstore app allows users to:
 
 Both the `index.html` (frontend) and `flask_task.py` (backend API) files can be opened in an IDE like PyCharm or Visual Studio Code for further exploration. 
 
-The API was tested using **Postman**.
+The API was tested using **Postman** (Automated API Testing).
 
 ### **Prerequisites**
 - Python 3.x (Download [here](https://www.python.org/downloads/release/python-3130/), and ensure to check "Add to PATH" during installation.)
