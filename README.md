@@ -15,7 +15,8 @@ This bookstore app allows users to:
 - Add new books.
 - Update or delete books from the catalogue.
 
-Both the `index.html` (frontend) and `flask_task.py` (backend API) files can be opened in an IDE like PyCharm or Visual Studio Code for further exploration.  
+Both the `index.html` (frontend) and `flask_task.py` (backend API) files can be opened in an IDE like PyCharm or Visual Studio Code for further exploration. 
+
 The API was tested using **Postman**.
 
 ### **Prerequisites**
